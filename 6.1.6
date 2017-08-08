@@ -1,0 +1,15 @@
+#!/bin/bash
+#6.1.6
+#Accept Remote rsyslogMessages Only onDesignated Log Hosts
+
+printf "Checking if rsyslog is listening for remote messages: "
+printf "ModLoad imtcp.so: "
+
+if grep '$ModLoad imtcp.so' /etc/rsyslog.conf >/dev/null ; then
+	printf "\e[32mNo remediation needed\e[0m\n"
+else
+
+	sed -i 's/#$ModLoad imtcp/$ModLoad imtcp.so/g' /etc/rsyslog.conf
+	sed -i 's/#$InputTCPServerRun 514/$InputTCPServerRun 514/g' /etc/rsyslog.conf
+	pkill -HUP rsyslogd
+fi
