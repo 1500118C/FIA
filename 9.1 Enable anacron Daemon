@@ -1,0 +1,9 @@
+#!/bin/bash 
+#9.1 Enable anacron Daemon
+printf "Checking if anacron is enabled:\n"
+if rpm -q cronie-anacron | grep "not installed" ; then # Install the package if it hasnt already been installed
+    yum -y install cronie-anacron
+    printf "\e[32mAnacron enabled\e[0m\n"
+else
+    printf "\e[32mNo remediation needed\e[0m\n"
+fi
