@@ -1,0 +1,9 @@
+#!/bin/bash 
+#9.2 Enable crond Daemon
+printf "Checking if cron is enabled:\n"
+if systemctl is-enabled crond | grep "enabled" ; then # Enable crond if it hasnt been enabled yet
+    printf "\e[32mNo remediation needed\e[0m\n"
+else
+    systemctl enable crond
+    printf "\e[32mCron Enabled\e[0m\n"
+fi
