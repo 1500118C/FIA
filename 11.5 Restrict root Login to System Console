@@ -1,0 +1,9 @@
+#!/bin/bash 
+#11.5 Restrict root Login to System Console
+printf "Checking if /etc/securetty is empty:\n"
+if [ -s "/etc/securetty" ] ; then
+    cp /dev/null /etc/securetty
+    printf "\e[32m/etc/Removed entries not in a physically secure location\e[0m\n"
+else
+    printf "\e[32mNo remediation needed\e[0m\n"
+fi
