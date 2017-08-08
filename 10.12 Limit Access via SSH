@@ -1,0 +1,44 @@
+#!/bin/bash
+
+#10.12 Limit Access via SSH 
+printf "Checking access via SSH:\n"
+remsshalwusrs=`grep "^AllowUsers" /etc/ssh/sshd_config`
+remsshalwgrps=`grep "^AllowGroups" /etc/ssh/sshd_config`
+remsshdnyusrs=`grep "^DenyUsers" /etc/ssh/sshd_config`
+remsshdnygrps=`grep "^DenyGroups" /etc/ssh/sshd_config`
+
+if [ -z "$remsshalwusrs" -o "$remsshalwusrs" == "AllowUsers[[:space:]]" ]
+then
+    echo "AllowUsers user1" >> /etc/ssh/sshd_config
+    echo -e "\e[32m AllowUsers added\e[0m\n"
+    echo -e "\e[32m $remsshalwusrs\e[0m"
+else
+    echo -e "\e[32m $remsshalwusrs\e[0m"
+fi
+
+if [ -z "$remsshalwgrps" -o "$remsshalwgrps" == "AllowUsers[[:space:]]" ]
+then
+    echo "AllowGroups group1" >> /etc/ssh/sshd_config
+    echo -e "\e[32m AllowGroups added\e[0m\n"
+    echo -e "\e[32m $remsshalwgrps\e[0m"
+else
+    echo -e "\e[32m $remsshalwgrps\e[0m"
+fi
+
+if [ -z "$remsshdnyusrs" -o "$remsshdnyusrs" == "AllowUsers[[:space:]]" ]
+then
+    echo "DenyUsers user2 user3" >> /etc/ssh/sshd_config
+    echo -e "\e[32m DenyUsers Added\e[0m\n"
+    echo -e "\e[32m $remsshdnyusrs\e[0m"
+else
+    echo -e "\e[32m $remsshdnyusrs\e[0m"
+fi
+
+if [ -z "$remsshdnygrps" -o "$remsshdnygrps" == "AllowUsers[[:space:]]" ]
+then
+    echo "DenyGroups group2" >> /etc/ssh/sshd_config
+    echo -e "\e[32m DenyGroups Added\e[0m"
+    echo -e "\e[32m $remsshdnygrps\e[0m"
+else
+    echo -e "\e[32m $remsshdnygrps\e[0m"
+fi
