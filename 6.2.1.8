@@ -1,0 +1,15 @@
+#!/bin/bash
+#6.2.1.8 Record Events That Modify the System's Network Environment
+printf "Checking if events that modify the system's environment are recorded:\n"
+if (egrep 'sethostname | setdomainname |\/etc\/issue|\/etc\/hosts|\/etc\/sysconfig\/network' /etc/audit/audit.rules | grep "a always,exit -F arch=b64 -S sethostname -S setdomainname -k system-locale" >/dev/null) && (egrep 'sethostname | setdomainname |\/etc\/issue|\/etc\/hosts|\/etc\/sysconfig\/network' /etc/audit/audit.rules | grep "a always,exit -F arch=b32 -S sethostname -S setdomainname -k system-locale" >/dev/null) && (egrep 'sethostname | setdomainname |\/etc\/issue|\/etc\/hosts|\/etc\/sysconfig\/network' /etc/audit/audit.rules | grep "w /etc/issue -p wa -k system-locale" >/dev/null) && (egrep 'sethostname | setdomainname |\/etc\/issue|\/etc\/hosts|\/etc\/sysconfig\/network' /etc/audit/audit.rules | grep "w /etc/issue.net -p wa -k system-locale" >/dev/null) && (egrep 'sethostname | setdomainname |\/etc\/issue|\/etc\/hosts|\/etc\/sysconfig\/network' /etc/audit/audit.rules | grep "w /etc/hosts -p wa -k system-locale" >/dev/null) && (egrep 'sethostname | setdomainname |\/etc\/issue|\/etc\/hosts|\/etc\/sysconfig\/network' /etc/audit/audit.rules | grep "w /etc/sysconfig/network -p wa -k system-locale" >/dev/null) ; then
+    printf "\e[32mNo remediation needed\e[0m\n"
+else
+    echo "-a always,exit -F arch=b64 -S sethostname -S setdomainname -k system-locale" >> /etc/audit/audit.rules
+    echo "-a always,exit -F arch=b32 -S sethostname -S setdomainname -k system-locale" >> /etc/audit/audit.rules
+    echo "-w /etc/issue -p wa -k system-locale" >> /etc/audit/audit.rules
+    echo "-w /etc/issue.net -p wa -k system-locale" >> /etc/audit/audit.rules
+    echo "-w /etc/hosts -p wa -k system-locale" >> /etc/audit/audit.rules
+    echo "-w /etc/sysconfig/network -p wa -k system-locale" >> /etc/audit/audit.rules
+    pkill -P 1 -HUP auditd
+    printf "\e[32mEvents that modify the system's environment are recorded\e[0m\n"
+fi
