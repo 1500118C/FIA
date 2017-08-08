@@ -1,0 +1,83 @@
+#!/bin/bash
+#6.2.1.6 Record Events That Modify Date and Time Information
+#(Unexpected changes in system date and/or time could be a sign of malicious activity on the system.)
+checksystem=`uname -m | grep "64"`
+checkmodifydatetimeadjtimex=`egrep 'adjtimex' /etc/audit/audit.rules`
+
+if [ -z "$checksystem" ]
+then
+        echo "It is a 32-bit system."
+
+        if [ -z "$checkmodifydatetimeadjtimex" ]
+        then
+                echo "Date & Time Modified Events - FAILED (Adjtimex is not configured)"
+                echo "-a always,exit -F arch=b32 -S adjtimex -S settimeofday -S stime -k time-change" >> /etc/audit/rules.d/audit.rules
+                        echo "-a always,exit -F arch=b32 -S adjtimex -S settimeofday -S stime -k time-change" >> /etc/audit/audit.rules
+                echo "Adjtimex is now configured"
+
+        else
+echo "Date & Time Modified Events - PASSED (Adjtimex is configured)"
+        fi
+
+else
+        echo "It is a 64-bit system."
+
+        if [ -z "$checkmodifydatetimeadjtimex" ]
+        then
+                echo "Date & Time Modified Events - FAILED (Adjtimex is not configured)"
+                        echo "-a always,exit -F arch=b64 -S adjtimex -S settimeofday -k time-change" >> /etc/audit/rules.d/audit.rules
+                        echo "-a always,exit -F arch=b64 -S adjtimex -S settimeofday -k time-change" >> /etc/audit/audit.rules
+                echo "-a always,exit -F arch=b32 -S adjtimex -S settimeofday -S stime -k time-change" >> /etc/audit/rules.d/audit.rules
+                        echo "-a always,exit -F arch=b32 -S adjtimex -S settimeofday -S stime -k time-change" >> /etc/audit/audit.rules
+                echo "Adjtimex is now configured"
+ else
+                echo "Date & Time Modified Events - PASSED (Adjtimex is configured)"
+        fi
+
+fi
+
+checkmodifydatetimesettime=`egrep 'settimeofday' /etc/audit/audit.rules`
+
+if [ -z "$checksystem" ]
+then
+
+        if [ -z "$checkmodifydatetimesettime" ]
+        then
+                echo "Date & Time Modified Events - FAILED (Settimeofday is not configured)"
+                echo "-a always,exit -F arch=b32 -S clock_settime -k time-change" >> /etc/audit/rules.d/audit.rules
+                        echo "-a always,exit -F arch=b32 -S clock_settime -k time-change" >> /etc/audit/audit.rules
+                echo "Settimeofday is now configured"
+else
+                echo "Date & Time Modified Events - PASSED (Settimeofday is configured)"
+        fi
+
+else
+
+        if [ -z "$checkmodifydatetimesettime" ]
+        then
+                echo "Date & Time Modified Events - FAILED (Settimeofday is not configured)"
+                        echo "-a always,exit -F arch=b64 -S clock_settime -k time-change" >> /etc/audit/rules.d/audit.rules
+                        echo "-a always,exit -F arch=b64 -S clock_settime -k time-change" >> /etc/audit/audit.rules
+                echo "-a always,exit -F arch=b32 -S clock_settime -k time-change" >> /etc/audit/rules.d/audit.rules
+                        echo "-a always,exit -F arch=b32 -S clock_settime -k time-change" >> /etc/audit/audit.rules
+                echo "Settimeofday is now configured"
+else
+                echo "Date & Time Modified Events - PASSED (Settimeofday is configured)"
+        fi
+
+fi
+
+checkmodifydatetimeclock=`egrep 'clock_settime' /etc/audit/audit.rules`
+
+if [ -z "$checkmodifydatetimeclock" ]
+then
+        echo "Date & Time Modified Events - FAILED (Clock Settime is not configured)"
+        echo "-w /etc/localtime -p wa -k time-change" >> /etc/audit/rules.d/audit.rules
+                echo "-w /etc/localtime -p wa -k time-change" >> /etc/audit/audit.rules
+        echo "Clock Settime is now configured"
+
+else
+        echo "Date & Time Modified Events - PASSED (Clock Settime is configured)"
+fi
+
+pkill -P 1 -HUP auditd
