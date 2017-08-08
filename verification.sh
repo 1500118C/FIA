@@ -353,9 +353,6 @@ else
 	printf "\e[31mMTA is not Local-Only\e[0m\n"
 fi
 printf "\e[32mScan completed!\n"
-printf "Press any key to exit\e[0m\n"
-read -n 1 -s
-kill -9 $PPID
 
 
 
