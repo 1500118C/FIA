@@ -1,0 +1,9 @@
+#!/bin/bash 
+#10.4 Disable X11Forwarding
+printf "Checking if X11Forwarding is disabled:\n"
+if grep "^X11Forwarding[[:space:]]no" "/etc/ssh/sshd_config"; then
+    printf "\e[32mNo remediation needed\e[0m\n"
+else
+    sed -i 's/^X11Forwarding yes/X11Forwarding no/' /etc/ssh/sshd_config
+    printf "\e[32mX11Fowarding is disabled\e[0m\n"    
+fi
