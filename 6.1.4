@@ -1,0 +1,28 @@
+#!/bin/bash
+#6.1.4
+#Create and Set Permissions on rsyslogLog Files
+#ensure that log files exist & correct permissions are set
+
+touch /var/log/messages
+chown root:root /var/log/messages
+chmod og-rwx /var/log/messages
+
+touch /var/log/secure	
+chown root:root /var/log/secure
+chmod og-rwx /var/log/secure
+
+touch /var/log/maillog
+chown root:root /var/log/maillog
+chmod og-rwx /var/log/maillog
+
+touch /var/log/cron
+chown root:root /var/log/cron
+chmod og-rwx /var/log/cron
+
+touch /var/log/spooler
+chown root:root /var/log/spooler
+chmod og-rwx /var/log/spooler
+
+touch /var/log/boot.log
+chown root:root /var/log/boot.log
+chmod og-rwx /var/log/boot.log
