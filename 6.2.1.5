@@ -1,0 +1,15 @@
+#!/bin/bash
+#6.2.1.5 Enable Auditing for Processes That Start Prior to auditd
+#(Audit events need to be captured on processes that start up prior to auditd, so that potential malicious activity cannot go undetected.)
+
+checkgrub=$(grep "linux" /boot/grub2/grub.cfg | grep "audit=1")
+if [ -z "$checkgrub"  ]
+then
+        var="GRUB_CMDLINE_LINUX"
+        sed -i /$var/d /etc/default/grub
+        printf "\nGRUB_CMDLINE_LINUX=\"audit=1\"" >> /etc/default/grub
+else
+        echo "audit 1 is pr"
+fi
+
+grub2-mkconfig -o /boot/grub2/grub.cfg
