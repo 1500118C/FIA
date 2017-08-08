@@ -1,0 +1,13 @@
+#!/bin/bash
+#6.2.1.11 Collect session initiation information
+printf "Checking if session initiation information is collected:\n"
+if (egrep 'wtmp|btmp|utmp' /etc/audit/audit.rules | grep "w /var/run/utmp -p wa -k session" >/dev/null) && (egrep 'wtmp|btmp|utmp' /etc/audit/audit.rules | grep "w /var/log/wtmp -p wa -k session" >/dev/null) && (egrep 'wtmp|btmp|utmp' /etc/audit/audit.rules | grep "w /var/log/btmp -p wa -k session" >/dev/null) ; then
+    printf "\e[32mNo remediation needed\e[0m\n"
+else #Add the following lines to /etc/audit/audit.rules file
+    echo "-w /var/run/utmp -p wa -k session" >> /etc/audit/audit.rules
+    echo "-w /var/log/wtmp -p wa -k session" >> /etc/audit/audit.rules
+    echo "-w /var/log/btmp -p wa -k session" >> /etc/audit/audit.rules
+    #Execute following command to restart auditd
+    pkill -HUP -P 1 auditd
+    printf "\e[32mSession initiation information collected\e[0m\n"
+fi
