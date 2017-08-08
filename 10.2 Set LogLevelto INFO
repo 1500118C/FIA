@@ -1,0 +1,10 @@
+#!/bin/bash
+
+#10.2 Set LogLevelto INFO
+printf "Checking if LogLevel is set to INFO:\n"
+if grep "^LogLevel INFO" "/etc/ssh/sshd_config"; then
+    printf "\e[32mNo remediation needed\e[0m\n"       
+else
+    sed -i 's/^#LogLevel INFO/LogLevel INFO/' /etc/ssh/sshd_config
+    printf "\e[32mLogLevel is set to INFO\e[0m\n"      
+fi
