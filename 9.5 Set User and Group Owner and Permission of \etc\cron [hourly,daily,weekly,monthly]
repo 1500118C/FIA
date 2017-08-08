@@ -1,0 +1,37 @@
+#!/bin/bash 
+#9.5 Set User/Group Owner and Permission on /etc/cron.[hourly,daily,weekly,monthly]
+printf "Checking if /etc/cron.hourly has the correct permissions:\n"
+if ls -ld /etc/cron.hourly | grep -e drwx------ ; then # Modify the file permissions to allow only users to read, write and execute
+    printf "\e[32mNo remediation needed\e[0m\n"
+else
+    chown root:root /etc/cron.hourly
+    chmod og-rwx /etc/cron.hourly
+    printf "\e[32mChanged to correct permission\e[0m\n"
+fi
+
+printf "Checking if /etc/cron.daily has the correct permissions:\n"
+if ls -ld /etc/cron.daily | grep -e drwx------ ; then
+     printf "\e[32mNo remediation needed\e[0m\n"
+else
+    chown root:root /etc/cron.daily
+    chmod og-rwx /etc/cron.daily
+    printf "\e[32mChanged to correct permission\e[0m\n"
+fi
+
+printf "Checking if /etc/cron.weekly has the correct permissions:\n"
+if ls -ld /etc/cron.weekly | grep -e drwx------ ; then
+    printf "\e[32mNo remediation needed\e[0m\n"
+else
+    chown root:root /etc/cron.weekly
+    chmod og-rwx /etc/cron.weekly
+    printf "\e[32mChanged to correct permission\e[0m\n"
+fi
+
+printf "Checking if /etc/cron.monthly has the correct permissions:\n"
+if ls -ld /etc/cron.monthly | grep -e drwx------ ; then
+    printf "\e[32mNo remediation needed\e[0m\n"
+else
+    chown root:root /etc/cron.monthly
+    chmod og-rwx /etc/cron.monthly
+    printf "\e[32mChanged to correct permission\e[0m\n"
+fi
