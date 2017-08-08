@@ -449,10 +449,6 @@ fi
 systemctl restart postfix
 
 printf "\e[32mCompleted!\n"
-printf "Press any key to exit\e[0m\n"
-read -n 1 -s
-kill -9 $PPID
-
 
 
 
