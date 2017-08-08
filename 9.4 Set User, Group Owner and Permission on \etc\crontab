@@ -1,0 +1,10 @@
+#!/bin/bash 
+#9.4 Set User/Group Owner and Permission on /etc/crontab
+printf "Checking if the /etc/crontab file has the correct permissions:\n"
+if ls -ld /etc/crontab | grep -e -rw------- ; then # Modify the file permissions to allow only users to read and write
+    printf "\e[32mNo remediation needed\e[0m\n"
+else
+    chown root:root /etc/crontab
+    chmod og-rwx /etc/crontab
+    printf "\e[32mChanged to correct permission\e[0m\n"
+fi
