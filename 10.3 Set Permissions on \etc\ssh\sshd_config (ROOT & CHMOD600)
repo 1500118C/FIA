@@ -1,0 +1,17 @@
+#!/bin/bash 
+#10.3 Set Permissions on /etc/ssh/sshd_config (ROOT & CHMOD600)
+printf "Checking if /etc/ssh/sshd_config file's owner and group is set to ROOT:\n"
+if ls -l /etc/ssh/sshd_config | grep "root root"; then 
+    printf "\e[32mNo remediation needed\e[0m\n"
+else 
+    chown root:root /etc/ssh/sshd_config 
+    printf "\e[32m/etc/ssh/sshd_config file's owner and group is set to ROOT\e[0m\n"  
+fi
+
+printf "Checking if /etc/ssh/sshd_config file's permissions is correct:\n"
+if ls -l /etc/ssh/sshd_config | grep -e -rw-------; then
+    printf "\e[32mNo remediation needed\e[0m\n"
+else
+    chmod 600 /etc/ssh/sshd_config
+    printf "\e[32m/etc/ssh/sshd_config file's permissions is correct\e[0m\n"
+fi
