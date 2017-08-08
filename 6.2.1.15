@@ -1,0 +1,12 @@
+#!/bin/bash
+#6.2.1.15 Collect successful file system mounts
+printf "Checking if filesystem mounts are recorded:\n"
+if (grep mounts /etc/audit/audit.rules | grep "a always,exit -F arch=b64 -S mount -F auid>=1000 -F auid!=4294967295 -k mounts" >/dev/null) && (grep mounts /etc/audit/audit.rules | grep "a always,exit -F arch=b32 -S mount -F auid>=1000 -F auid!=4294967295 -k mounts" >/dev/null) ; then
+    printf "\e[32mNo remediation needed\e[0m\n"
+else #Add the following lines to /etc/audit/audit.rules file
+    echo "-a always,exit -F arch=b64 -S mount -F auid>=1000 -F auid!=4294967295 -k mounts" >> /etc/audit/audit.rules
+    echo "-a always,exit -F arch=b32 -S mount -F auid>=1000 -F auid!=4294967295 -k mounts" >> /etc/audit/audit.rules
+    #Execute the following command to restart auditd
+    pkill -HUP -P 1 auditd
+    printf "\e[32mFile system mounts are recorded\e[0m\n"
+fi
