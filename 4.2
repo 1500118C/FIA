@@ -1,0 +1,12 @@
+#!/bin/bash
+#4.2
+#Set Permissions on /boot/grub2/grub.cfg
+#set permission to read+write for root only
+
+printf "Checking if grub.cfg file is set to read and write for root only: "
+
+if stat -L -c "%a" /boot/grub2/grub.cfg | grep "00" >/dev/null ; then
+	printf "\e[32mNo remediation needed\e[0m\n"
+else
+	chmod og-rwx /boot/grub2/grub.cfg
+fi
