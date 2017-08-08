@@ -1,0 +1,10 @@
+#!/bin/bash 
+#10.8 Disable SSH Root Login
+printf "Checking if SSH Root login is disabled:\n"
+if grep "^PermitRootLogin[[:space:]]no" "/etc/ssh/sshd_config"; then       
+    printf "\e[32mNo remediation needed\e[0m\n"
+else
+    sed -i 's/^#PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config
+    printf "\e[32mSSH Root login is disabled\e[0m\n"
+          
+fi
