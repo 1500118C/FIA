@@ -1,0 +1,12 @@
+#!/bin/bash
+#5.2
+#Enable Randomized Virtual Memory Region Placement
+#set the system flag to force randomized virtual memory region placement
+
+printf "Checking if virtual memory is randomized: "
+
+if sysctl kernel.randomize_va_space >/dev/null ; then
+	printf "\e[32mNo remediation needed\e[0m\n"
+else	
+	echo "kernel.randomize_va_space = 2" >> /etc/sysctl.conf
+fi
