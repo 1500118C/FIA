@@ -1,0 +1,15 @@
+#!/bin/bash
+#6.2.1.7 Record Events That Modify User/Group Information
+#(Unexpected changes to these files could be an indication that the system has been compromised and that an unauthorized user is attempting to hide their activities or compromise additional accounts.)
+printf "Checking if events that modify user/group information are recorded:\n"
+if (egrep '\/etc\/group|\/etc\/passwd|\/etc\/gshadow|\/etc\/shadow|\/etc\/security\/opasswd' /etc/audit/audit.rules | grep "w /etc/group -p wa -k identity" >/dev/null) && (egrep '\/etc\/group|\/etc\/passwd|\/etc\/gshadow|\/etc\/shadow|\/etc\/security\/opasswd' /etc/audit/audit.rules | grep "w /etc/passwd -p wa -k identity" >/dev/null) && (egrep '\/etc\/group|\/etc\/passwd|\/etc\/gshadow|\/etc\/shadow|\/etc\/security\/opasswd' /etc/audit/audit.rules | grep "w /etc/gshadow -p wa -k identity" >/dev/null) && (egrep '\/etc\/group|\/etc\/passwd|\/etc\/gshadow|\/etc\/shadow|\/etc\/security\/opasswd' /etc/audit/audit.rules | grep "w /etc/shadow -p wa -k identity" >/dev/null) && (egrep '\/etc\/group|\/etc\/passwd|\/etc\/gshadow|\/etc\/shadow|\/etc\/security\/opasswd' /etc/audit/audit.rules | grep "w /etc/security/opasswd -p wa -k identity" >/dev/null) ; then
+    printf "\e[32mNo remediation needed\e[0m\n"
+else
+    echo "-w /etc/group -p wa -k identity" >> /etc/audit/audit.rules
+    echo "-w /etc/passwd -p wa -k identity" >> /etc/audit/audit.rules
+    echo "-w /etc/gshadow -p wa -k identity" >> /etc/audit/audit.rules
+    echo "-w /etc/shadow -p wa -k identity" >> /etc/audit/audit.rules
+    echo "-w /etc/security/opasswd -p wa -k identity" >> /etc/audit/audit.rules
+    pkill -P 1 -HUP auditd
+    printf "\e[32mEvents that modify user/group information are recorded\e[0m\n"
+fi
