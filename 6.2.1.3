@@ -1,0 +1,5 @@
+#!/bin/bash
+#6.2.1.3 Disable System on Audit Log Full (add following lines into this file)
+sed -i '/space_left_action/s/= .*/= email/' /etc/audit/auditd.conf
+sed -i '/action_mail_acct/s/= .*/= root/' /etc/audit/auditd.conf
+sed -i '/admin_space_left_action/s/= .*/= halt/' /etc/audit/auditd.conf
