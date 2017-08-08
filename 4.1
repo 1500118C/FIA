@@ -1,0 +1,12 @@
+#!/bin/bash
+#4.1
+#Set User/Group Owner on /boot/grub2/grub.cfg
+#set the owner & group to the root user
+
+printf "Checking if grub.cfg belongs to root: "
+
+if stat -L -c "owner=%U group=%G" /boot/grub2/grub.cfg | grep "owner=root group=root" >/dev/null ; then
+	printf "\e[32mNo remediation needed\e[0m\n"
+else
+	chown root:root /boot/grub2/grub.cfg
+fi
