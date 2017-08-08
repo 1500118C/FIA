@@ -1,0 +1,19 @@
+#!/bin/bash 
+#9.7 Restrict at Daemon
+printf "Checking if at jobs are restricted:\n"
+if ! stat -L /etc/at.deny > /dev/null | grep "No such file or directory" ; then # Remove file if it hasnt been removed
+    printf "\e[32mNo remediation needed\e[0m\n"
+else
+    rm /etc/at.deny
+    printf "\e[32m /etc/at.deny has been removed\e[0m\n"
+fi
+
+printf "Checking if /etc/at.allow has been created with the correct permissions:\n"
+if stat -L -c "%a %u %g" /etc/at.allow | egrep ".00 0 0" ; then # Create file with the correct permissions
+    printf "\e[32mNo remediation needed\e[0m\n"
+else
+    touch /etc/at.allow
+    chown root:root /etc/at.allow
+    chmod og-rwx /etc/at.allow
+    printf "\e[32mChanged to correct permission\e[0m\n"
+fi
