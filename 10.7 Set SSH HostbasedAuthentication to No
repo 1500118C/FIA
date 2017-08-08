@@ -1,0 +1,9 @@
+#!/bin/bash 
+#10.7 Set SSH HostbasedAuthentication to No
+printf "Checking if SSH HostbasedAuthentication is set to No:\n"
+if grep "^HostbasedAuthentication[[:space:]]no" "/etc/ssh/sshd_config"; then
+    printf "\e[32mNo remediation neede\e[0m\n"
+else
+    sed -i 's/^#HostbasedAuthentication no/HostbasedAuthentication no/' /etc/ssh/sshd_config
+    printf "\e[32m SSH HostbasedAuthentication is set to No\e[0m\n"
+fi
