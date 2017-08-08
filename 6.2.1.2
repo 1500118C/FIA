@@ -1,0 +1,3 @@
+#!/bin/bash
+#6.2.1.2 Keep All Auditing Information (add 'max_log...' into this file)
+sed -i '/max_log_file_action/s/= .*/= keep_logs/' /etc/audit/auditd.conf
