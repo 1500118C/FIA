@@ -1,0 +1,13 @@
+#!/bin/bash
+#5.1
+#Restrict Core Dumps
+#prevent users from overriding the soft variables
+
+printf "Checking if core dumps are restricted: \n"
+
+if grep "hard" /etc/security/limits.conf > /dev/null ; then
+	printf "\e[32mNo remediation needed\e[0m\n"
+else
+	echo "* hard core 0" >> /etc/security/limits.conf
+	echo "fs.suid_dumpable = 0" >> /etc/sysctl.conf
+fi
