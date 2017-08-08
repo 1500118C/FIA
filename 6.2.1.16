@@ -1,0 +1,12 @@
+#!/bin/bash
+#6.2.1.16 Collect file deletion events by user
+printf "Checking if file deletion events by user are recorded:\n"
+if (grep delete /etc/audit/audit.rules | grep "a always,exit -F arch=b64 -S unlink -S unlinkat -S rename -S renameat -F auid>=1000 -F auid!=4294967295 -k delete" >/dev/null) && (grep delete /etc/audit/audit.rules | grep "a always,exit -F arch=b32 -S unlink -S unlinkat -S rename -S renameat -F auid>=1000 -F auid!=4294967295 -k delete" >/dev/null) ; then
+    printf "\e[32mNo remediation needed\e[0m\n"
+else #Add the following lines to /etc/audit/audit.rules file
+    echo "-a always,exit -F arch=b64 -S unlink -S unlinkat -S rename -S renameat -F auid>=1000 -F auid!=4294967295 -k delete" >> /etc/audit/audit.rules
+    echo "-a always,exit -F arch=b32 -S unlink -S unlinkat -S rename -S renameat -F auid>=1000 -F auid!=4294967295 -k delete" >> /etc/audit/audit.rules
+    #Execute the following command to restart auditd
+    pkill -P 1 -HUP auditd
+    printf "\e[32mFile deletion events by user are recorded\e[0m\n"
+fi
