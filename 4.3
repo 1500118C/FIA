@@ -1,0 +1,18 @@
+#!/bin/bash
+#4.3
+#Set Boot Loader Password
+#set boot loader pw for anyone rebooting the system
+
+printf "Checking if boot loader password is set: \n"
+
+grep "set superusers" /boot/grub2/grub.cfg
+grep "password" /boot/grub2/grub.cfg
+
+if grep "password" /boot/grub2/grub.cfg >/dev/null ; then
+	 printf "\e[32mNo remediation needed\e[0m\n"
+else
+	touch test1.pwd
+	echo "password\npassword\n" >> test1.pwd
+	grub2-mkpasswd-pbkdf2 < test1.pwd > test.md5
+	grub2-mkconfig -o /boot/grub2/grub.cfg
+fi
