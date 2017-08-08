@@ -1,0 +1,10 @@
+#!/bin/bash
+
+#10.13 Set SSH Banner
+printf "Check if SSH Banner is set:\n"
+if grep "^Banner[[:space:]]/etc/issue.net" "/etc/ssh/sshd_config"; then   
+    printf "\e[32mNo remediation needed\e[0m\n"   
+else
+    sed -i 's/^#Banner none/Banner \/etc\/issue.net/' /etc/ssh/sshd_config
+    printf "\e[32mBanner is set\e[0m\n"
+fi
